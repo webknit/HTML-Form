@@ -62,6 +62,18 @@ body {
 	text-transform: uppercase;
 }
 
+.form__error {
+	color: #ff0000;
+	display: none;
+	font-size: 0.7em;
+	margin-bottom: 1em;
+	text-transform: uppercase;
+}
+
+.form__error--show {
+	display: block;
+}
+
 .form__input, 
 .form__textarea {
 	border: 1px solid #ccc;
