@@ -1,6 +1,6 @@
 var Form = Form || {};
 
-Form.Submitted = false;
+Form.formErrorsFound = false;
 
 Form.ErrorText = {
 	input: 'This field is required',
@@ -9,13 +9,17 @@ Form.ErrorText = {
 
 Form.Elements = {
 	errorMessage: $('.form__error'),
+	input: $('.form__input'),
 	inputCheck: $('.form__input-check'),
 	emailCheck: $('.form__email-check'),
 	passwordCheck: $('.form__password-check'),
+	password1: $('#password1'),
+	password2: $('#password2'),
 }
 
 Form.checkForm = function() {
 
+	Form.Submitted = true;
 	var formOk = true;
 
 	Form.Elements.errorMessage.removeClass('form__error--show');
@@ -26,7 +30,7 @@ Form.checkForm = function() {
 		
 			$(this).next('.form__error').addClass('form__error--show');
 			
-			formOk == false;
+			formOk = false;
 		
 		}
 		
@@ -42,26 +46,25 @@ Form.checkForm = function() {
 		
 		    $(this).next('.form__error').addClass('form__error--show');
 		    
-		    formOk == false;
-		    
+		    formOk = false;
+		   
 		}
 		
 	});
 	
-	var pass1 = $('#password1').val();
-	var pass2 = $('#password2').val();
+	var pass1 = Form.Elements.password1.val();
+	var pass2 = Form.Elements.password2.val();
 	
-	console.log('pass1 ==' + pass1);
-	
-	if(pass1 !== pass1 || pass1 == '' || pass2 == '') {
+	if(pass1 !== pass2 || pass1 == '' || pass2 == '') {
 	
 		$('#password2').next('.form__error').addClass('form__error--show');
 		
-		formOk == false;
+		formOk = false;
 	
 	}
 	
-	if(!formOk) return false;
+	if(formOk) alert('sent');
+	else Form.formErrorsFound = true;
 	
 };
 
@@ -70,6 +73,11 @@ $('.form').submit(function(e) {
 	e.preventDefault();
 
 	Form.checkForm();
-
-    
+  
 }); 
+
+Form.Elements.input.blur(function() {
+
+	if(Form.formErrorsFound) Form.checkForm();
+
+});
