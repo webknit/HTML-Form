@@ -14,19 +14,19 @@ Form.Elements = {
 	inputCheck: $('.form__input-check'),
 	emailCheck: $('.form__email-check'),
 	passwordCheck: $('.form__password-check'),
-	password1: $('#password1'),
-	password2: $('#password2'),
+	matchingFields: $('input[data-match]')
 }
 
 Form.CheckEntry = function() {
 
+	var form = this;
 	Form.Elements.inputCheck.each(function() {
 	
 		if($(this).val() === '') {
 		
 			$(this).next('.form__error').addClass('form__error--show');
-			
-			this.formOk = false;
+
+			form.formOk = false;
 		
 		}
 		
@@ -35,6 +35,8 @@ Form.CheckEntry = function() {
 }
 
 Form.CheckEmail = function() {
+
+	var form = this;
 
 	this.Elements.emailCheck.each(function() {
 	
@@ -46,7 +48,7 @@ Form.CheckEmail = function() {
 		
 		    $(this).next('.form__error').addClass('form__error--show');
 		    
-		    this.formOk = false;
+		    form.formOk = false;
 		   
 		}
 		
@@ -54,23 +56,59 @@ Form.CheckEmail = function() {
 
 }
 
-Form.CheckPassword = function() {
-
-	var pass1 = this.Elements.password1.val();
-	var pass2 = this.Elements.password2.val();
-
-	console.log('pass1 is ' + pass1);
-	console.log('pass2 is ' + pass2);
+Form.SameArrayValues = function(array) {
 	
-	if(pass1 !== pass2 || pass1 == '' || pass2 == '') {
-	
-		this.Elements.password2.next('.form__error').addClass('form__error--show');
+	return array.reduce(function(a, b){ 
+		return (a.val() === b.val() && a.val() !== '') ? true : false;
+	});
+};
+
+Form.CheckMatches = function() {
+
+	var matchIds = {};
+
+	var form = this;
+
+	this.Elements.matchingFields.each(function(index, element){
+		var $element = $(element);
+
+		var dataMatch = $element.data('match');
+
+		if(matchIds[dataMatch] === undefined) {
+
+			matchIds[dataMatch] = [$element];
+
+		} else {
+
+			matchIds[dataMatch].push($element);
+
+		}
 		
-		this.formOk = false;
-	
+
+	});
+
+	for(var dataMatch in matchIds) {
+		for (var i = matchIds[dataMatch].length - 1; i >= 0; i--) {
+
+			if(Form.SameArrayValues(matchIds[dataMatch]) === false) {
+				this.formOk = false;
+				matchIds[dataMatch][matchIds[dataMatch].length - 1].next('.form__error').addClass('form__error--show');
+			}
+			
+		};
 	}
 
-	console.log("formOk is " + this.formOk);
+	// console.log(matchIds.password);
+	// var pass1 = this.Elements.password1.val();
+	// var pass2 = this.Elements.password2.val();
+	
+	// if(pass1 !== pass2 || pass1 == '' || pass2 == '') {
+	
+	// 	this.Elements.password2.next('.form__error').addClass('form__error--show');
+		
+	// 	this.formOk = false;
+	
+	// }
 
 }
 
@@ -83,26 +121,28 @@ Form.checkForm = function() {
 	// Seperate the fuunctions
 	this.CheckEntry();
 
+	console.log(this.formOk);
+
 	this.CheckEmail();
 
-	this.CheckPassword();
+	this.CheckMatches();
 
-	if(this.formOk) alert('sent');
+	console.log("formOk is " + this.formOk);
 
-	else this.formErrorsFound = true;
+	return this.formOk;
 	
 };
 
-$('.form').submit(function(e) {
+$('.form').submit(function() {
 
-	e.preventDefault();
+	//e.preventDefault();
 
-	Form.checkForm();
+	return Form.checkForm();
   
 }); 
 
 Form.Elements.input.blur(function() {
 
-	if(Form.formErrorsFound) Form.checkForm();
+	if(!Form.formOk) Form.checkForm();
 
 });

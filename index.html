@@ -31,9 +31,14 @@
 				<input type="text" class="form__input form__email-check" id="email" name="email" placeholder="Email" />
 				<label class="form__error">Email is incorrect</label>
 				
-				<label class="form__label" for="password1">Email Address</label>
-				<input type="password" class="form__input form__password-check" id="password1" name="password1" placeholder="Password" />
-				<input type="password" class="form__input form__password-check" id="password2" name="password2" placeholder="Confirm Password" />
+				<label class="form__label" for="password1">Password</label>
+				<input type="password" class="form__input form__password-check" name="password1" placeholder="Password" data-match="password"/>
+				<input type="password" class="form__input form__password-check" name="password2" placeholder="Confirm Password" data-match="password"/>
+				<label class="form__error">Password needed, and they have to match</label>
+
+				<label class="form__label" for="password1">Username</label>
+				<input type="password" class="form__input form__password-check" name="password1" placeholder="Password" data-match="username"/>
+				<input type="password" class="form__input form__password-check" name="password2" placeholder="Confirm Password" data-match="username"/>
 				<label class="form__error">Password needed, and they have to match</label>
 				
 				<input type="submit" name="next" class="form__submit" value="Submit" />
