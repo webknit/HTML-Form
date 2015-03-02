@@ -1,6 +1,7 @@
 var Form = Form || {};
 
 Form.formErrorsFound = false;
+Form.formOk = true;
 
 Form.ErrorText = {
 	input: 'This field is required',
@@ -17,12 +18,7 @@ Form.Elements = {
 	password2: $('#password2'),
 }
 
-Form.checkForm = function() {
-
-	Form.Submitted = true;
-	var formOk = true;
-
-	Form.Elements.errorMessage.removeClass('form__error--show');
+Form.CheckEntry = function() {
 
 	Form.Elements.inputCheck.each(function() {
 	
@@ -30,13 +26,17 @@ Form.checkForm = function() {
 		
 			$(this).next('.form__error').addClass('form__error--show');
 			
-			formOk = false;
+			this.formOk = false;
 		
 		}
 		
 	});
-	
-	Form.Elements.emailCheck.each(function() {
+
+}
+
+Form.CheckEmail = function() {
+
+	this.Elements.emailCheck.each(function() {
 	
 		var email = $(this).val();
 		
@@ -46,25 +46,50 @@ Form.checkForm = function() {
 		
 		    $(this).next('.form__error').addClass('form__error--show');
 		    
-		    formOk = false;
+		    this.formOk = false;
 		   
 		}
 		
 	});
-	
-	var pass1 = Form.Elements.password1.val();
-	var pass2 = Form.Elements.password2.val();
+
+}
+
+Form.CheckPassword = function() {
+
+	var pass1 = this.Elements.password1.val();
+	var pass2 = this.Elements.password2.val();
+
+	console.log('pass1 is ' + pass1);
+	console.log('pass2 is ' + pass2);
 	
 	if(pass1 !== pass2 || pass1 == '' || pass2 == '') {
 	
-		$('#password2').next('.form__error').addClass('form__error--show');
+		this.Elements.password2.next('.form__error').addClass('form__error--show');
 		
-		formOk = false;
+		this.formOk = false;
 	
 	}
-	
-	if(formOk) alert('sent');
-	else Form.formErrorsFound = true;
+
+	console.log("formOk is " + this.formOk);
+
+}
+
+Form.checkForm = function() {
+
+	this.formOk = true;
+
+	this.Elements.errorMessage.removeClass('form__error--show');
+
+	// Seperate the fuunctions
+	this.CheckEntry();
+
+	this.CheckEmail();
+
+	this.CheckPassword();
+
+	if(this.formOk) alert('sent');
+
+	else this.formErrorsFound = true;
 	
 };
 
