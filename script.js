@@ -98,18 +98,6 @@ Form.CheckMatches = function() {
 		};
 	}
 
-	// console.log(matchIds.password);
-	// var pass1 = this.Elements.password1.val();
-	// var pass2 = this.Elements.password2.val();
-	
-	// if(pass1 !== pass2 || pass1 == '' || pass2 == '') {
-	
-	// 	this.Elements.password2.next('.form__error').addClass('form__error--show');
-		
-	// 	this.formOk = false;
-	
-	// }
-
 }
 
 Form.checkForm = function() {
